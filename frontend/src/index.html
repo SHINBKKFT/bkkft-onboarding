@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BKKFT Onboarding</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#f0f2f5;color:#1a1a2e;min-height:100vh}
+/* NAV */
+.nav{background:#0a1628;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.nav-brand{font-size:1.1rem;font-weight:700;letter-spacing:.5px}
+.nav-sub{font-size:.75rem;opacity:.6;margin-top:2px}
+.nav-user{font-size:.85rem;background:#1e3a5f;padding:6px 14px;border-radius:20px}
+/* CARDS */
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);padding:28px}
+/* WELCOME SCREEN */
+.welcome-wrap{max-width:480px;margin:60px auto;padding:0 16px}
+.welcome-logo{text-align:center;margin-bottom:32px}
+.welcome-logo h1{font-size:1.8rem;color:#0a1628;font-weight:800}
+.welcome-logo p{color:#666;margin-top:6px;font-size:.95rem}
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:.85rem;font-weight:600;color:#444;margin-bottom:6px}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1.5px solid #dde2ec;border-radius:7px;font-size:.95rem;outline:none;transition:border .2s}
+.form-group input:focus,.form-group select:focus{border-color:#0a1628}
+.btn{display:inline-block;padding:11px 24px;border:none;border-radius:7px;font-size:.95rem;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn-primary{background:#0a1628;color:#fff;width:100%}
+.btn-primary:hover{opacity:.85}
+.btn-outline{background:#fff;color:#0a1628;border:1.5px solid #0a1628}
+.btn-outline:hover{background:#f0f2f5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.error-msg{background:#fef2f2;color:#c0392b;padding:10px 14px;border-radius:7px;font-size:.85rem;margin-top:12px;border:1px solid #fca5a5}
+/* DASHBOARD */
+.dash-wrap{max-width:820px;margin:0 auto;padding:24px 16px}
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;padding:6px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.tab-btn{flex:1;padding:10px;border:none;background:none;border-radius:7px;font-size:.9rem;font-weight:600;color:#666;cursor:pointer;transition:all .15s}
+.tab-btn.active{background:#0a1628;color:#fff}
+/* SCHEDULE TABLE */
+.schedule-table{width:100%;border-collapse:collapse;font-size:.87rem;margin-bottom:24px}
+.schedule-table th{background:#0a1628;color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.schedule-table th:first-child{border-radius:7px 0 0 0}
+.schedule-table th:last-child{border-radius:0 7px 0 0}
+.schedule-table td{padding:9px 12px;border-bottom:1px solid #f0f2f5}
+.schedule-table tr:hover td{background:#f8f9ff}
+.schedule-table td:first-child{font-weight:600;color:#0a1628;white-space:nowrap}
+/* QUIZ CARDS */
+.quiz-cards{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+.quiz-card{background:#fff;border-radius:10px;border:1.5px solid #e8eaf0;padding:16px 20px;display:flex;align-items:center;justify-content:space-between}
+.quiz-card-info h4{font-size:.95rem;font-weight:700;color:#0a1628}
+.quiz-card-info p{font-size:.8rem;color:#888;margin-top:3px}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:600}
+.badge-verbal{background:#e8f4fd;color:#1a6896}
+.badge-soon{background:#fef3e2;color:#b45309}
+.badge-mentor{background:#f0fdf4;color:#166534}
+.badge-pass{background:#dcfce7;color:#166534}
+.badge-fail{background:#fee2e2;color:#991b1b}
+.badge-near{background:#fef9c3;color:#854d0e}
+/* QUIZ SCREEN */
+.quiz-wrap{max-width:680px;margin:0 auto;padding:24px 16px}
+.quiz-header{margin-bottom:20px}
+.quiz-header h2{font-size:1.2rem;font-weight:700;color:#0a1628}
+.progress-bar-wrap{background:#e8eaf0;border-radius:10px;height:6px;margin-top:10px}
+.progress-bar{background:#0a1628;height:6px;border-radius:10px;transition:width .3s}
+.quiz-progress-text{font-size:.8rem;color:#888;margin-top:6px}
+.question-card{margin-bottom:20px}
+.question-text{font-size:1rem;font-weight:600;color:#1a1a2e;margin-bottom:16px;line-height:1.5}
+.options{display:flex;flex-direction:column;gap:9px}
+.option-btn{padding:12px 16px;border:1.5px solid #dde2ec;border-radius:8px;background:#fff;text-align:left;font-size:.9rem;cursor:pointer;transition:all .15s;line-height:1.4}
+.option-btn:hover{border-color:#0a1628;background:#f8f9ff}
+.option-btn.selected{border-color:#0a1628;background:#eef1f8;font-weight:600}
+.option-btn.correct{border-color:#16a34a;background:#f0fdf4;color:#166534}
+.option-btn.wrong{border-color:#dc2626;background:#fef2f2;color:#991b1b}
+.option-btn.penalty{border-color:#dc2626;background:#fef2f2}
+.option-btn.positive{border-color:#16a34a;background:#f0fdf4}
+.option-btn.neutral-opt{border-color:#d1d5db;background:#f9fafb}
+.option-hint{font-size:.75rem;margin-top:3px;opacity:.8}
+.quiz-nav{display:flex;gap:12px;justify-content:space-between}
+.placeholder-notice{background:#f8f9ff;border:1.5px dashed #c7d2e8;border-radius:8px;padding:20px;text-align:center;color:#555;font-size:.9rem}
+/* RESULTS SCREEN */
+.results-wrap{max-width:680px;margin:0 auto;padding:24px 16px}
+.score-circle{text-align:center;margin:24px 0}
+.score-big{font-size:3rem;font-weight:800;color:#0a1628}
+.score-label{font-size:.9rem;color:#888;margin-top:4px}
+.outcome-box{padding:16px 20px;border-radius:10px;text-align:center;margin:16px 0}
+.outcome-pass{background:#dcfce7;color:#166534;border:1.5px solid #86efac}
+.outcome-near{background:#fef9c3;color:#854d0e;border:1.5px solid #fde047}
+.outcome-fail{background:#fee2e2;color:#991b1b;border:1.5px solid #fca5a5}
+.outcome-box h3{font-size:1.1rem;font-weight:700}
+.outcome-box p{font-size:.85rem;margin-top:6px}
+.breakdown{margin-top:24px}
+.breakdown h3{font-size:.95rem;font-weight:700;color:#0a1628;margin-bottom:12px}
+.breakdown-item{padding:12px 14px;border-radius:8px;border:1px solid #e8eaf0;margin-bottom:8px;background:#fff}
+.breakdown-item .q-text{font-size:.85rem;font-weight:600;color:#333;margin-bottom:8px}
+.breakdown-item .answer-row{font-size:.8rem;margin-top:4px}
+.answer-row span{display:inline-block;padding:2px 8px;border-radius:4px;font-weight:500}
+.ans-correct{background:#dcfce7;color:#166534}
+.ans-wrong{background:#fee2e2;color:#991b1b}
+.ans-selected{background:#e8edf8;color:#1e3a5f}
+/* UTIL */
+.hidden{display:none!important}
+.mt-16{margin-top:16px}
+.loading{text-align:center;padding:40px;color:#888;font-size:.9rem}
+.section-title{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#888;margin-bottom:12px}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="nav">
+  <div>
+    <div class="nav-brand">BKK French Touch</div>
+    <div class="nav-sub">Onboarding Program</div>
+  </div>
+  <div id="nav-user" class="nav-user hidden"></div>
+</nav>
+
+<!-- SCREEN: WELCOME -->
+<div id="screen-welcome" class="welcome-wrap">
+  <div class="welcome-logo">
+    <h1>Welcome</h1>
+    <p>Please fill in your details to begin your onboarding journey.</p>
+  </div>
+  <div class="card">
+    <div class="form-group">
+      <label>Full Name <span style="color:#e74c3c">*</span></label>
+      <input type="text" id="inp-name" placeholder="e.g. Jane Smith">
+    </div>
+    <div class="form-group">
+      <label>Department <span style="color:#e74c3c">*</span></label>
+      <select id="inp-dept">
+        <option value="">— Select department —</option>
+        <option value="sales">Sales</option>
+        <option value="operations">Operations</option>
+        <option value="marketing">Marketing</option>
+        <option value="hr">HR</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Job Title</label>
+      <input type="text" id="inp-position" placeholder="e.g. Event Coordinator">
+    </div>
+    <div class="form-group">
+      <label>Onboarding Cohort <span style="color:#e74c3c">*</span></label>
+      <select id="inp-cohort">
+        <option value="">— Loading cohorts… —</option>
+      </select>
+    </div>
+    <div id="welcome-error" class="error-msg hidden"></div>
+    <button class="btn btn-primary mt-16" id="btn-register">Start Onboarding →</button>
+  </div>
+</div>
+
+<!-- SCREEN: DASHBOARD -->
+<div id="screen-dashboard" class="dash-wrap hidden">
+  <div class="tabs">
+    <button class="tab-btn active" data-day="1">Day 1 — Culture</button>
+    <button class="tab-btn" data-day="2">Day 2 — Tools</button>
+    <button class="tab-btn" data-day="3">Day 3 — Role Training</button>
+  </div>
+  <div id="day-content"></div>
+</div>
+
+<!-- SCREEN: QUIZ -->
+<div id="screen-quiz" class="quiz-wrap hidden">
+  <div class="card quiz-header">
+    <h2 id="quiz-title"></h2>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="quiz-progress-bar"></div></div>
+    <div class="quiz-progress-text" id="quiz-progress-text"></div>
+  </div>
+  <div class="card mt-16" id="question-card"></div>
+  <div class="quiz-nav mt-16">
+    <button class="btn btn-outline" id="btn-prev">← Previous</button>
+    <button class="btn btn-primary" id="btn-next">Next →</button>
+  </div>
+</div>
+
+<!-- SCREEN: RESULTS -->
+<div id="screen-results" class="results-wrap hidden">
+  <div class="card">
+    <div class="score-circle">
+      <div class="score-big" id="result-score"></div>
+      <div class="score-label" id="result-label"></div>
+    </div>
+    <div id="result-outcome"></div>
+    <div id="result-error" class="error-msg hidden mt-16"></div>
+    <div class="quiz-nav mt-16">
+      <button class="btn btn-outline" id="btn-back-dash">← Back to Dashboard</button>
+      <button class="btn btn-primary" id="btn-submit-results">Submit Results to HR</button>
+    </div>
+  </div>
+  <div class="card breakdown mt-16">
+    <h3>Question Breakdown</h3>
+    <div id="breakdown-list"></div>
+  </div>
+</div>
+
+
+<script>
+const PB_URL = 'http://host.docker.internal:8090';
+
+// ── QUIZ DATA ──────────────────────────────────────────────────────────────
+
+const QR2 = {
+  id: 'QR2', day: '1', title: 'Quick Review #2 — Day 1 Exam',
+  type: 'single', maxScore: 10,
+  questions: [
+    { text: 'What is the most important section of a standard?',
+      options: ['Title','Key Actions','KPI','Mistakes to Avoid','Author'], correct: [3] },
+    { text: 'A standard has become too long. What should you do?',
+      options: ['Keep it as is','Add more details','Split it into smaller standards','Delete the KPI section'], correct: [2] },
+    { text: 'When should a standard be updated?',
+      options: ['Once per year','When the manager approves it','Immediately, when improvement is identified','Never without permission'], correct: [2] },
+    { text: 'What is the goal of "Sort" (the first S in 5S)?',
+      options: ['Organize your desk neatly','Clean everything visible','Remove anything not needed in the next 24 hours','Label all your files'], correct: [2] },
+    { text: 'What does "Sustain" mean in the 5S system?',
+      options: ['Clean once a week','Check your system once a month','Apply 5S when you remember','Apply 5S every day, consistently'], correct: [3] },
+    { text: 'How does the 5S system apply to your mind?',
+      options: ['It does not apply to mindset','Remove distractions, know your priorities, maintain clarity daily','Only applies to physical spaces','Only applies to email'], correct: [1] },
+    { text: 'Why is trust especially critical in the hospitality and events industry?',
+      options: ['Clients test our service before buying','Clients cannot test or touch the experience before buying','Our prices are higher than competitors','We rely on word-of-mouth only'], correct: [1] },
+    { text: 'What is the correct teamwork behavior when you have important information?',
+      options: ['Keep it until you need it','Share it with the team immediately','Send it in the weekly report','Tell only your manager'], correct: [1] },
+    { text: 'What does efficiency mean in our company?',
+      options: ['Working longer hours','Adding more steps for safety','Maximizing value while minimizing waste','Reducing communication'], correct: [2] },
+    { text: 'What is the best mindset to succeed here?',
+      options: ['Focus only on your own tasks','Do what is fastest','Combine trust, teamwork, and efficiency in every action','Follow rules only when supervised'], correct: [2] }
+  ]
+};
+
+const FA = {
+  id: 'FA', day: '3', title: 'Final Assessment',
+  type: 'penalty', maxScore: 100, passThreshold: 80,
+  questions: [
+    { text: 'Why is trust the foundation of our business?',
+      options: [
+        { text: 'We depend entirely on client referrals', points: -3 },
+        { text: 'Clients cannot test or experience what we sell before buying', points: 4 },
+        { text: 'The service is intangible and depends on our promise', points: 3 },
+        { text: 'Our prices require justification', points: 0 },
+        { text: 'We compete on trust, not price', points: 3 }
+      ], maxPoints: 10 },
+    { text: 'What actions correctly demonstrate trust in our company?',
+      options: [
+        { text: 'Overpromising to close the deal', points: -5 },
+        { text: 'Delivering exactly what was agreed', points: 4 },
+        { text: 'Being transparent with clients, team, and partners', points: 3 },
+        { text: 'Hiding small problems to avoid conflict', points: -4 },
+        { text: 'Admitting mistakes quickly and clearly', points: 3 }
+      ], maxPoints: 10 },
+    { text: 'What does effective teamwork look like here?',
+      options: [
+        { text: 'Keeping information until you are asked for it', points: -4 },
+        { text: 'Sharing important information in real time', points: 3 },
+        { text: 'Helping teammates when needed', points: 3 },
+        { text: 'Focusing exclusively on your own tasks', points: -3 },
+        { text: 'Communicating clearly and proactively', points: 4 }
+      ], maxPoints: 10 },
+    { text: 'What is the correct mindset for efficiency at BKK French Touch?',
+      options: [
+        { text: 'Work more hours to get more done', points: -3 },
+        { text: 'Add extra steps to make sure nothing goes wrong', points: -3 },
+        { text: 'Maximize value and minimize waste in every process', points: 4 },
+        { text: 'Follow existing processes and improve them continuously', points: 3 },
+        { text: 'Keep communication short, clear, and structured', points: 3 }
+      ], maxPoints: 10 },
+    { text: 'What is the correct understanding of a standard vs. a process?',
+      options: [
+        { text: 'A process is more flexible and modern', points: -3 },
+        { text: 'A standard is continuously improved by the team', points: 4 },
+        { text: 'A process improves itself automatically', points: -3 },
+        { text: 'A standard is clear, simple, and owned by the team', points: 3 },
+        { text: 'A standard covers multiple actions in one document', points: -3 }
+      ], maxPoints: 10 },
+    { text: 'What is the most important section of a standard, and why?',
+      options: [
+        { text: 'The title — because clarity starts with naming', points: 0 },
+        { text: 'The KPI — because measurement drives improvement', points: 2 },
+        { text: 'The key actions — because steps define execution', points: 2 },
+        { text: 'Mistakes to avoid — because this is where real performance improvement happens', points: 6 },
+        { text: 'The intention — because it aligns motivation', points: 0 }
+      ], maxPoints: 10 },
+    { text: 'Which of the following correctly applies the 5S system to digital work?',
+      options: [
+        { text: 'Keeping all emails in the inbox for easy access', points: -4 },
+        { text: 'Maintaining inbox under 10 messages using labels and archiving', points: 4 },
+        { text: 'Organizing Asana with clear projects, sections, and tasks', points: 3 },
+        { text: 'Using WhatsApp for all updates regardless of type', points: -4 },
+        { text: 'Applying the same structured habits to digital tools every day', points: 3 }
+      ], maxPoints: 10 },
+    { text: 'What is the correct way to use Asana in our workflow?',
+      options: [
+        { text: 'Create tasks without due dates so they stay flexible', points: -4 },
+        { text: 'Use WhatsApp threads for project updates, not Asana', points: -4 },
+        { text: 'Every task must have a title, due date, assignee, and project', points: 4 },
+        { text: 'Mark tasks complete immediately when done', points: 3 },
+        { text: 'Use sub-tasks for steps within a single task', points: 3 }
+      ], maxPoints: 10 },
+    { text: 'What is the correct communication protocol?',
+      options: [
+        { text: 'WhatsApp for all communication including project updates', points: -4 },
+        { text: 'Use Gmail for urgent client messages to ensure they are seen', points: -3 },
+        { text: 'WhatsApp for real-time messages; Asana for task tracking; Gmail for formal external communication', points: 5 },
+        { text: 'Respond to client messages within one business day', points: -2 },
+        { text: 'Always reply to internal messages within 1 hour during working hours', points: 2 }
+      ], maxPoints: 10 },
+    { text: 'Department Knowledge — prepared by your M1/M2 mentor.',
+      options: [{ text: 'This section will be scored by your department trainer', points: 0 }],
+      maxPoints: 10, isPlaceholder: true }
+  ]
+};
+
+
+// ── SCHEDULE DATA ──────────────────────────────────────────────────────────
+
+const SCHEDULES = {
+  1: [
+    ['09:30–11:00','The Foundation, Policy & Lean Temple','Moc'],
+    ['11:00–11:10','Quick Review #1 (Verbal)','Moc'],
+    ['11:10–12:30','Company History, Ben\'s Vision & Lifestyle','Ben'],
+    ['12:30–13:30','Lunch','—'],
+    ['13:30–14:30','Company Tour & Department Overview','Moc'],
+    ['14:30–16:00','Communication as a Professional & Priority Matrix','Moc'],
+    ['16:00–17:00','Quick Review #2 — Written Exam','HR'],
+    ['17:00–18:00','Retake (if needed)','HR']
+  ],
+  2: [
+    ['09:30–10:30','System Set-Up','Thaw'],
+    ['10:30–11:00','How to Find, Create & Use Standards','Moc'],
+    ['11:00–11:10','Quick Review #3 (Verbal)','Moc'],
+    ['11:10–12:30','Introduction to Asana','Shin'],
+    ['12:30–13:30','Lunch','—'],
+    ['13:30–15:00','Asana Sandbox + FlowAccount','Shin'],
+    ['15:00–16:00','How to Use AI Effectively','Shin, Moc'],
+    ['16:00–17:00','Quick Review #4 — Written Exam','HR'],
+    ['17:00–18:00','Retake (if needed)','HR']
+  ],
+  3: [
+    ['09:00–11:30','Department Training Block 1','M1/M2 Mentor'],
+    ['11:30–11:40','Quick Review #5','Mentor'],
+    ['11:40–13:00','Department Training Block 2','M1/M2 Mentor'],
+    ['13:00–14:00','Lunch','—'],
+    ['14:00–15:30','Department Training Block 3','M1/M2 Mentor'],
+    ['15:30–15:40','Quick Review #6','Mentor'],
+    ['16:00–17:00','Final Assessment','HR'],
+    ['17:00–18:00','Retake (if needed)','HR']
+  ]
+};
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+
+const state = {
+  newHireId: null, name: '', department: '', cohort: '',
+  currentQuiz: null, currentQ: 0,
+  answers: {},   // { qIndex: [optionIndex, ...] }
+  results: null
+};
+
+// ── API HELPERS ────────────────────────────────────────────────────────────
+
+async function pbGet(path) {
+  const r = await fetch(PB_URL + path);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function pbPost(path, body) {
+  const r = await fetch(PB_URL + path, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ── SCREENS ────────────────────────────────────────────────────────────────
+
+function showScreen(id) {
+  ['screen-welcome','screen-dashboard','screen-quiz','screen-results']
+    .forEach(s => document.getElementById(s).classList.toggle('hidden', s !== id));
+}
+
+// ── WELCOME ────────────────────────────────────────────────────────────────
+
+async function loadCohorts() {
+  const sel = document.getElementById('inp-cohort');
+  try {
+    const data = await pbGet('/api/collections/cohorts/records?filter=status="active"&sort=-created&perPage=50');
+    sel.innerHTML = '<option value="">— Select cohort —</option>';
+    (data.items || []).forEach(c => {
+      const o = document.createElement('option');
+      o.value = c.id; o.textContent = c.name;
+      sel.appendChild(o);
+    });
+  } catch(e) {
+    sel.innerHTML = '<option value="">⚠ Could not load cohorts</option>';
+  }
+}
+
+document.getElementById('btn-register').addEventListener('click', async () => {
+  const name = document.getElementById('inp-name').value.trim();
+  const dept = document.getElementById('inp-dept').value;
+  const pos  = document.getElementById('inp-position').value.trim();
+  const cohort = document.getElementById('inp-cohort').value;
+  const errEl = document.getElementById('welcome-error');
+  errEl.classList.add('hidden');
+
+  if (!name) { showErr(errEl, 'Please enter your full name.'); return; }
+  if (!dept) { showErr(errEl, 'Please select your department.'); return; }
+  if (!cohort) { showErr(errEl, 'Please select your onboarding cohort.'); return; }
+
+  const btn = document.getElementById('btn-register');
+  btn.disabled = true; btn.textContent = 'Registering…';
+
+  try {
+    const rec = await pbPost('/api/collections/new_hires/records', {
+      name, department: dept, position: pos, cohort
+    });
+    state.newHireId = rec.id;
+    state.name = name; state.department = dept; state.cohort = cohort;
+    document.getElementById('nav-user').textContent = name;
+    document.getElementById('nav-user').classList.remove('hidden');
+    showScreen('screen-dashboard');
+    renderDay(1);
+  } catch(e) {
+    showErr(errEl, 'Cannot connect to PocketBase. Please contact HR.');
+    btn.disabled = false; btn.textContent = 'Start Onboarding →';
+  }
+});
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderDay(parseInt(btn.dataset.day));
+  });
+});
+
+function renderDay(day) {
+  const rows = SCHEDULES[day].map(([t,s,f]) =>
+    `<tr><td>${t}</td><td>${s}</td><td style="color:#666">${f}</td></tr>`).join('');
+
+  let quizHtml = '';
+  if (day === 1) {
+    quizHtml = `<div class="section-title mt-16">Assessments</div>
+    <div class="quiz-cards">
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Quick Review #1</h4><p>Verbal discussion — no score recorded</p></div>
+        <span class="badge badge-verbal">Verbal</span>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Quick Review #2 — Day 1 Exam</h4><p>10 questions · Lean Management, 5S, Company Values</p></div>
+        <button class="btn btn-primary" onclick="startQuiz('QR2')">Start Exam →</button>
+      </div>
+    </div>`;
+  } else if (day === 2) {
+    quizHtml = `<div class="section-title mt-16">Assessments</div>
+    <div class="quiz-cards">
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Quick Review #3</h4><p>Verbal — Asana structure &amp; standards</p></div>
+        <span class="badge badge-verbal">Verbal</span>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Quick Review #4 — Day 2 Exam</h4><p>Questions coming after Day 2 SOPs are complete</p></div>
+        <span class="badge badge-soon">Coming Soon</span>
+      </div>
+    </div>`;
+  } else {
+    quizHtml = `<div class="section-title mt-16">Assessments</div>
+    <div class="quiz-cards">
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Quick Review #5 &amp; #6</h4><p>Prepared by your M1/M2 mentor based on department training</p></div>
+        <span class="badge badge-mentor">Mentor Prepared</span>
+      </div>
+      <div class="quiz-card">
+        <div class="quiz-card-info"><h4>Final Assessment</h4><p>10 questions · Full penalty scoring · Pass: 80/100</p></div>
+        <button class="btn btn-primary" onclick="startQuiz('FA')">Start Assessment →</button>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('day-content').innerHTML = `
+    <div class="card">
+      <table class="schedule-table">
+        <thead><tr><th>Time</th><th>Session</th><th>Facilitator</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${quizHtml}
+    </div>`;
+}
+
+// ── QUIZ ───────────────────────────────────────────────────────────────────
+
+function startQuiz(quizId) {
+  state.currentQuiz = quizId === 'QR2' ? QR2 : FA;
+  state.currentQ = 0;
+  state.answers = {};
+  document.getElementById('quiz-title').textContent = state.currentQuiz.title;
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const quiz = state.currentQuiz;
+  const q = quiz.questions[state.currentQ];
+  const total = quiz.questions.length;
+  const pct = ((state.currentQ + 1) / total * 100).toFixed(0);
+
+  document.getElementById('quiz-progress-bar').style.width = pct + '%';
+  document.getElementById('quiz-progress-text').textContent =
+    `Question ${state.currentQ + 1} of ${total}`;
+  document.getElementById('btn-prev').disabled = state.currentQ === 0;
+  document.getElementById('btn-next').textContent =
+    state.currentQ === total - 1 ? 'Submit' : 'Next →';
+
+  const sel = state.answers[state.currentQ] || [];
+
+  let optHtml = '';
+  if (q.isPlaceholder) {
+    optHtml = `<div class="placeholder-notice">
+      <strong>Department Knowledge</strong><br>
+      This question (10 points) will be scored by your M1/M2 trainer.<br>
+      Points will be added to your total by HR after Day 3.
+    </div>`;
+  } else if (quiz.type === 'penalty') {
+    optHtml = q.options.map((o, i) => {
+      const isSel = sel.includes(i);
+      return `<button class="option-btn${isSel?' selected':''}" onclick="toggleOpt(${i})">${o.text}</button>`;
+    }).join('');
+  } else {
+    optHtml = q.options.map((o, i) => {
+      const isSel = sel.includes(i);
+      return `<button class="option-btn${isSel?' selected':''}" onclick="selectOpt(${i})">${o.text}</button>`;
+    }).join('');
+  }
+
+  const hint = quiz.type === 'penalty' && !q.isPlaceholder
+    ? '<p style="font-size:.78rem;color:#888;margin-bottom:10px">Select all that apply — some options carry penalties.</p>' : '';
+
+  document.getElementById('question-card').innerHTML =
+    `<div class="question-text">${state.currentQ + 1}. ${q.text}</div>${hint}<div class="options">${optHtml}</div>`;
+}
+
+function selectOpt(i) {
+  state.answers[state.currentQ] = [i];
+  renderQuestion();
+}
+function toggleOpt(i) {
+  const cur = state.answers[state.currentQ] || [];
+  const idx = cur.indexOf(i);
+  if (idx === -1) cur.push(i); else cur.splice(idx, 1);
+  state.answers[state.currentQ] = cur;
+  renderQuestion();
+}
+
+document.getElementById('btn-prev').addEventListener('click', () => {
+  if (state.currentQ > 0) { state.currentQ--; renderQuestion(); }
+});
+document.getElementById('btn-next').addEventListener('click', () => {
+  const quiz = state.currentQuiz;
+  if (state.currentQ < quiz.questions.length - 1) {
+    state.currentQ++; renderQuestion();
+  } else {
+    calcResults();
+  }
+});
+
+// ── SCORING ────────────────────────────────────────────────────────────────
+
+function calcResults() {
+  const quiz = state.currentQuiz;
+  let total = 0;
+  const breakdown = quiz.questions.map((q, i) => {
+    const sel = state.answers[i] || [];
+    let pts = 0, isCorrect = false;
+
+    if (q.isPlaceholder) {
+      pts = 0;
+    } else if (quiz.type === 'single') {
+      isCorrect = sel.length === 1 && q.correct.includes(sel[0]);
+      pts = isCorrect ? 1 : 0;
+    } else {
+      pts = sel.reduce((s, oi) => s + (q.options[oi]?.points || 0), 0);
+      pts = Math.max(0, Math.min(pts, q.maxPoints));
+    }
+    total += pts;
+    return { q, sel, pts, isCorrect };
+  });
+
+  let score, maxScore, passed;
+  if (quiz.type === 'single') {
+    score = total; maxScore = quiz.maxScore; passed = score >= maxScore * 0.7;
+  } else {
+    score = total; maxScore = quiz.maxScore; passed = score >= quiz.passThreshold;
+  }
+
+  state.results = { score, maxScore, passed, breakdown, quizType: quiz.type };
+  renderResults();
+}
+
+// ── RESULTS ────────────────────────────────────────────────────────────────
+
+function renderResults() {
+  const { score, maxScore, passed, breakdown, quizType } = state.results;
+  const quiz = state.currentQuiz;
+
+  if (quizType === 'single') {
+    document.getElementById('result-score').textContent = `${score} / ${maxScore}`;
+    document.getElementById('result-label').textContent = 'Correct answers';
+    const pct = Math.round(score / maxScore * 100);
+    document.getElementById('result-outcome').innerHTML = passed
+      ? `<div class="outcome-box outcome-pass"><h3>✅ Good Work!</h3><p>${pct}% — Proceed to the next session.</p></div>`
+      : `<div class="outcome-box outcome-fail"><h3>⚠️ Review Needed</h3><p>${pct}% — Please review the material and speak with your trainer.</p></div>`;
+  } else {
+    document.getElementById('result-score').textContent = `${score} / ${maxScore}`;
+    document.getElementById('result-label').textContent = 'Total points';
+    let outcomeHtml;
+    if (score >= 80) {
+      outcomeHtml = `<div class="outcome-box outcome-pass"><h3>✅ Pass — ${score}/100</h3><p>Congratulations! Proceed to regular work. Your 30/60/90 plan will be set with your manager in Week 1.</p></div>`;
+    } else if (score >= 70) {
+      outcomeHtml = `<div class="outcome-box outcome-near"><h3>⚠️ Near Pass — ${score}/100</h3><p>Manager review session required. Retake within 5 working days.</p></div>`;
+    } else {
+      outcomeHtml = `<div class="outcome-box outcome-fail"><h3>❌ Retake Required — ${score}/100</h3><p>HR + manager debrief scheduled. Additional coaching provided. Retake within 3 working days.</p></div>`;
+    }
+    document.getElementById('result-outcome').innerHTML = outcomeHtml;
+  }
+
+  // Breakdown
+  const bHtml = breakdown.map(({ q, sel, pts, isCorrect }, i) => {
+    if (q.isPlaceholder) {
+      return `<div class="breakdown-item"><div class="q-text">Q${i+1}. ${q.text}</div>
+        <div class="answer-row" style="color:#888;font-size:.8rem">Scored by trainer</div></div>`;
+    }
+    let ansHtml = '';
+    if (quizType === 'single') {
+      const selText = sel.map(oi => q.options[oi]).join(', ') || '(no answer)';
+      const corrText = q.correct.map(oi => q.options[oi]).join(', ');
+      ansHtml = `<div class="answer-row">Your answer: <span class="${isCorrect?'ans-correct':'ans-wrong'}">${selText}</span></div>
+        ${!isCorrect ? `<div class="answer-row" style="margin-top:4px">Correct: <span class="ans-correct">${corrText}</span></div>` : ''}`;
+    } else {
+      ansHtml = q.options.map((o, oi) => {
+        const wasSel = sel.includes(oi);
+        const cls = wasSel ? (o.points >= 0 ? 'ans-correct' : 'ans-wrong') : 'ans-selected';
+        const ptsTxt = o.points > 0 ? `+${o.points}` : `${o.points}`;
+        if (!wasSel && o.points === 0) return '';
+        return `<div class="answer-row"><span class="${wasSel?(o.points>=0?'ans-correct':'ans-wrong'):''}">
+          ${wasSel?'✓':'○'} ${o.text} (${ptsTxt} pts)</span></div>`;
+      }).join('');
+      ansHtml += `<div class="answer-row" style="margin-top:4px;font-weight:600">Points: ${pts}/${q.maxPoints}</div>`;
+    }
+    return `<div class="breakdown-item"><div class="q-text">Q${i+1}. ${q.text}</div>${ansHtml}</div>`;
+  }).join('');
+  document.getElementById('breakdown-list').innerHTML = bHtml;
+
+  document.getElementById('result-error').classList.add('hidden');
+  showScreen('screen-results');
+}
+
+document.getElementById('btn-back-dash').addEventListener('click', () => {
+  showScreen('screen-dashboard');
+});
+
+document.getElementById('btn-submit-results').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-submit-results');
+  const errEl = document.getElementById('result-error');
+  errEl.classList.add('hidden');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  try {
+    const quiz = state.currentQuiz;
+    const { score, maxScore, passed, breakdown } = state.results;
+    const session = await pbPost('/api/collections/quiz_sessions/records', {
+      new_hire: state.newHireId,
+      quiz_id: quiz.id,
+      quiz_day: quiz.day,
+      attempt_number: 1,
+      score, max_score: maxScore, passed,
+      status: 'completed',
+      submitted_at: new Date().toISOString()
+    });
+
+    for (let i = 0; i < breakdown.length; i++) {
+      const { q, sel, pts, isCorrect } = breakdown[i];
+      if (q.isPlaceholder) continue;
+      await pbPost('/api/collections/quiz_answers/records', {
+        session: session.id,
+        question_number: i + 1,
+        question_text: q.text,
+        selected_options: sel,
+        correct_options: quiz.type === 'single' ? q.correct : [],
+        points_earned: pts,
+        is_correct: isCorrect || false
+      });
+    }
+
+    btn.textContent = '✅ Results Saved';
+    btn.style.background = '#16a34a';
+    document.getElementById('result-error').innerHTML = '';
+    const notice = document.createElement('div');
+    notice.className = 'outcome-box outcome-pass mt-16';
+    notice.innerHTML = '<h3>Results Submitted</h3><p>HR has been notified. Your results are saved in the system.</p>';
+    document.getElementById('result-outcome').after(notice);
+  } catch(e) {
+    showErr(errEl, 'Failed to save results. Please screenshot this page and send to HR.');
+    btn.disabled = false; btn.textContent = 'Submit Results to HR';
+  }
+});
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+
+function showErr(el, msg) {
+  el.textContent = msg; el.classList.remove('hidden');
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+
+loadCohorts();
+
+</script>
+</body>
+</html>
